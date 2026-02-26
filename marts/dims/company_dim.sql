@@ -1,13 +1,15 @@
-CREATE OR REPLACE TABLE `deportfolio-486507.taxi_marts.dim_company` AS
+ALTER TABLE `deportfolio-486507.taxi_marts.dim_company` 
+ADD COLUMN effective_start_date DATE;
 
-SELECT 
-ROW_NUMBER() over(ORDER BY company_name) AS company_id,
-company_name
+ALTER TABLE `deportfolio-486507.taxi_marts.dim_company` 
+ADD COLUMN effective_end_date DATE;
 
-FROM (
-  SELECT DISTINCT company AS company_name
-  
-  FROM `deportfolio-486507.taxi_staging.taxi_clean` 
-  WHERE company is NOT NULL
-)
+ALTER TABLE `deportfolio-486507.taxi_marts.dim_company` 
+ADD COLUMN is_current BOOL;
 
+
+UPDATE `deportfolio-486507.taxi_marts.dim_company`
+SET
+  effective_start_date = DATE '2000-01-01',
+  effective_end_date = NULL,
+  is_current = TRUE;
